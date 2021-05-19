@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import json, random
+import json, random, ast
 #файл с вопросами
 from PyQt5.QtWidgets import QWidget
 
@@ -8,6 +8,18 @@ phrases = json.load(f)
 f.close()
 #случайный порядок вопросов
 random.shuffle(phrases)
+values = {-3: -10,
+          -2: -7,
+          -1: -3,
+          0: 0,
+          1: 3,
+          2: 7,
+          3: 10}
+
+f = open("descriptions.txt", encoding="utf-8")
+contents = f.read()
+descriptions = ast.literal_eval(contents)
+f.close()
 
 
 class Ui_MainWindow(object):
@@ -258,22 +270,22 @@ class Ui_MainWindow(object):
 
         for i in range(len(phrases[index]["characters"])):
                 hero = phrases[index]["characters"][i]
-                self.score[hero] += vall * 3
+                self.score[hero] += values[vall]
         if len(self.list_of_values) - 1 >= index: # correcting the old value
-                self.score[hero] -= self.list_of_values[index] * 3
+                self.score[hero] -= values[self.list_of_values[index]]
                 self.list_of_values[index] = vall
         else:
             self.list_of_values.append(vall)
 
+
     def finish(self):
-        self.finish_list=[(value,key) for key,value in self.score.items()]
+        self.finish_list = [(value,key) for key,value in self.score.items()]
         self.finish_list.sort(reverse=True)
-        if self.finish_list[0][0]==self.finish_list[1][0]:
-            self.phrase.setText("У Вас одинаково выражены два или более психотипа, которые\nхарактерны для персонажей сказки «Винни-Пух». Возможно, что\nу Вас одинаковое соотношение всех имеющихся психотипов. \nВозможен также вариант, что Вы просто ответили на вопросы таким образом,\n что Вы оказались на грани результатов, \nхотя на самом деле у Вас есть определенный \nпсихотип среди имеющихся персонажей.\n Мы не можем с точностью ответить, \nприсущи Вам черты всех персонажей или \nВы просто случайно получили такой результат. \nСоответственно, мы не можем предоставить более \nдетальное описание Вашей личности. \nОднако Вы можете рассмотреть таблицу с результатами\n и определить, личность какого персонажа набрала \nнаибольшее количество процентов.")
-            self.phrase.adjustSize()
-            MainWindow.sizeHint()
+        if self.finish_list[0][0] == self.finish_list[1][0]:
+            self.phrase.setText(descriptions["Смешанный тип"])
         else:
-            self.phrase.setText("Поздравляю!\nВы "+max(self.finish_list)[1])
+            self.phrase.setText("Поздравляю!\nВы " + max(self.finish_list)[1] + descriptions[max(self.finish_list)[1]])
+        self.phrase.adjustSize()
         self.init_game()
         self.next_button.deleteLater()
         self.back_button.deleteLater()
