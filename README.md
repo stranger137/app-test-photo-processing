@@ -1,4 +1,4 @@
-# Application "Кто Вы из Винни-Пуха?"
+# Application "Who are you from Winnie-the-Pooh?"
 It is an application made on PyQt5 which gives you a psychological test and then processes the photo of the result and offers the photo for downloading.
 
 # Getting started
