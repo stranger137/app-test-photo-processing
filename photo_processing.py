@@ -59,6 +59,7 @@ def sharpness(image, coeff):
 
 def temperature(image, temp):
     # Устанавливает одну из температур на выбор
+    # Код взят с https://stackoverflow.com/questions/11884544/setting-color-temperature-for-a-given-image-like-in-photoshop
     kelvin_table = [
      (255,56,0),
      (255,109,0),
